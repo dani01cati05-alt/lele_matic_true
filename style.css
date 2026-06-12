@@ -1,0 +1,380 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    overflow: hidden; 
+    height: 100vh;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* === HEADER DATA E ORA === */
+.datetime-header {
+    position: fixed;
+    top: 25px;
+    left: 30px;
+    z-index: 1000;
+    color: red;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+/* === DISPLAY CENTRALE === */
+.center-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    height: 600px; 
+    width: 600px; 
+    z-index: 0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    transform-style: preserve-3d;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.rotating-center-image {
+    animation: spin 12s linear infinite; 
+    height: 100%; 
+    width: auto;  
+    border-radius: 50%; 
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+#active-bg-model {
+    height: 100%; 
+    width: 100%;
+    background-color: transparent;
+    --poster-color: transparent; 
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+/* === LA RUOTA E I LINK === */
+.viewport {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px; 
+    transform-style: preserve-3d;
+    z-index: 1;
+}
+
+.wheel {
+    position: relative;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(-5deg) rotateY(0deg);
+}
+
+.wheel-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160px;
+    height: 220px;
+    margin-left: -80px;
+    margin-top: -110px;
+    transform-style: preserve-3d;
+    opacity: 0; 
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+a.wheel-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none; 
+    color: inherit;
+    transform-style: preserve-3d; 
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.wheel-item.active {
+    pointer-events: auto;
+    z-index: 10; 
+}
+
+
+
+/* === STILE FOTO E MODELLI SULLA RUOTA === */
+.wheel-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;   
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.wheel-content model-viewer {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    pointer-events: none; 
+}
+
+.wheel-content h3 {
+    display: none; 
+}
+
+/* === NUOVO TITOLO FISSO IN BASSO AL CENTRO === */
+#dynamic-title-container {
+    position: fixed;
+    bottom: 50px; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    text-align: center;
+    pointer-events: none; 
+}
+
+#dynamic-title {
+    color: red;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 24px; 
+    font-weight: bold;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin: 0;
+    opacity: 0; 
+    transition: opacity 0.3s ease;
+}
+
+/* === BOTTONE (INTEGRATO) === */
+.toggle-btn {
+    position: fixed;
+    top: 10px;
+    right: 30px;
+    z-index: 1000;
+    width: 80px;
+    height: 80px;
+    background-image: url('invert_button.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: none;
+    clip-path: inset(2px);
+}
+
+.toggle-btn:hover {
+    transform: none;
+}
+
+/* === MODALITÀ LIGHT E GESTIONE INVERSIONE === */
+
+body.light-mode {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Inversione bottone senza alone */
+body.light-mode .toggle-btn {
+    mix-blend-mode: difference;
+    filter: none;
+}
+
+/* Inverte foto e modelli */
+body.light-mode img,
+body.light-mode model-viewer {
+    filter: invert(1);
+    transition: filter 0.5s ease;
+}
+
+/* Inversione bottone teschio */
+body.light-mode .info-btn {
+    filter: invert(1);
+}
+
+body.light-mode #dynamic-title {
+    color: #00ffff; 
+}
+
+/* === RESPONSIVE MOBILE === */
+@media (max-width: 767px) {
+    .center-display {
+        width: 280px;
+        height: 280px;
+    }
+
+    .wheel-item {
+        width: 100px;
+        height: 140px;
+        margin-left: -50px;
+        margin-top: -70px;
+    }
+
+    .datetime-header {
+        top: 15px;
+        left: 20px;
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+
+    .toggle-btn {
+        top: 10px;
+        right: 15px;
+        width: 55px;
+        height: 55px;
+    }
+
+    #dynamic-title-container {
+        bottom: 30px;
+    }
+
+    #dynamic-title {
+        font-size: 16px;
+        letter-spacing: 2px;
+    }
+
+    .info-btn {
+        top: 10px;
+        width: 55px;
+        height: 55px;
+    }
+
+    .info-btn:hover {
+        transform: translateX(-50%) scale(1.05);
+    }
+
+    .info-content {
+        padding-top: 15vh;
+    }
+
+    .info-title {
+        font-size: 2.8rem;
+        margin-bottom: 40px !important;
+    }
+
+    .info-para {
+        font-size: 1.4rem;
+        margin: 25px 0 !important;
+    }
+}
+
+/* === GENERAL INFO DROPDOWN STYLE === */
+.info-btn {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2010; /* Sopra le fette e la scroll track */
+    width: 80px;
+    height: 80px;
+    background-image: url('assets/red_skull_1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    clip-path: inset(2px);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
+}
+
+.info-btn:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+.info-btn.active {
+    transform: translateX(-50%) rotate(180deg);
+}
+
+.info-dropdown {
+    position: fixed;
+    top: -100vh;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.96);
+    z-index: 1999;
+    transition: top 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+    overflow-y: scroll;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 120px 40px 60px 40px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.info-dropdown::-webkit-scrollbar {
+    display: none; /* Safari/Chrome */
+}
+
+.info-dropdown.active {
+    top: 0;
+}
+
+body.light-mode .info-dropdown {
+    background-color: rgba(255, 255, 255, 0.98);
+}
+
+body.light-mode .datetime-header {
+    color: #00ffff;
+}
+
+/* Stile della tipografia */
+.info-content {
+    max-width: 900px;
+    width: 100%;
+    color: #ff0000;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+    padding-top: 15vh;
+    padding-bottom: 25vh;
+}
+
+.stretch-text {
+    display: block;
+    font-weight: 900;
+    text-transform: uppercase;
+    transform-origin: center;
+    will-change: transform;
+    transition: transform 0.05s ease-out; /* Transizione morbida */
+}
+
+.info-title {
+    font-size: 6rem;
+    letter-spacing: 4px;
+    line-height: 1.1;
+    margin-bottom: 70px;
+    margin-top: 20px;
+}
+
+.info-para {
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+    line-height: 1.25;
+    margin: 45px 0;
+}

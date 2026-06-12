@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crackhead Bridge</title>
+    <link rel="stylesheet" href="stylediagonale.css">
+</head>
+<body>
+
+<a href="index.html" class="back-link">
+    <img src="faccia_rossa.png" class="back-button" alt="Indietro">
+</a>
+
+    <div class="scene3d">
+        <div class="gallery">
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge2.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge3.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge4.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge5.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge6.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge7.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge8.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge9.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge10.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge11.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge12.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge13.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge14.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge15.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge16.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge17.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge18.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge19.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge20.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge21.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge22.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge23.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge24.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge25.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge26.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge27.jpg');"></div>
+            <div class="card" style="background-image: url('crackhead_singole/crackhead_bridge28.jpg');"></div>
+        </div>
+    </div>
+
+    <div id="counter" class="counter">1 / 28</div>
+
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-nav lightbox-prev">&#10094;</div>
+        
+        <img id="lightbox-img" src="" alt="Foto">
+        
+        <div class="lightbox-nav lightbox-next">&#10095;</div>
+        
+        <div id="lightbox-counter" class="counter">1 / 28</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            const totalCards = cards.length;
+            
+            let scrollTarget = 0;
+            let scrollCurrent = 0;
+            
+            let isMobile = window.innerWidth < 768;
+            let baseSpacing = isMobile ? 25 : 40;  
+            let gapSize = isMobile ? 120 : 250;     
+            let activeZone = isMobile ? 30 : 45;   
+
+            window.addEventListener('resize', () => {
+                isMobile = window.innerWidth < 768;
+                baseSpacing = isMobile ? 25 : 40;
+                gapSize = isMobile ? 120 : 250;
+                activeZone = isMobile ? 30 : 45;
+            });
+
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const counterEl = document.getElementById('counter');
+            const lightboxCounterEl = document.getElementById('lightbox-counter');
+            const btnPrev = document.querySelector('.lightbox-prev');
+            const btnNext = document.querySelector('.lightbox-next');
+
+            let currentLightboxIndex = 0;
+
+            window.addEventListener('wheel', (e) => {
+                scrollTarget += e.deltaY * 0.4; 
+            });
+
+            // Gestione Drag & Touch per scorrimento gallery
+            let isDraggingGallery = false;
+            let isPointerDown = false;
+            let startPointerY = 0;
+            let startScrollTarget = 0;
+
+            function handlePointerStart(clientY) {
+                isPointerDown = true;
+                isDraggingGallery = false;
+                startPointerY = clientY;
+                startScrollTarget = scrollTarget;
+            }
+
+            function handlePointerMove(clientY) {
+                if (!isPointerDown) return;
+                const deltaY = clientY - startPointerY;
+                if (Math.abs(deltaY) > 5) {
+                    isDraggingGallery = true;
+                }
+                scrollTarget = startScrollTarget - deltaY * 1.5;
+            }
+
+            function handlePointerEnd() {
+                isPointerDown = false;
+                if (isDraggingGallery) {
+                    setTimeout(() => {
+                        isDraggingGallery = false;
+                    }, 50);
+                }
+            }
+
+            window.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.back-link') || e.target.closest('.lightbox') || e.target.closest('.lightbox-nav')) return;
+                handlePointerStart(e.clientY);
+            });
+            window.addEventListener('mousemove', (e) => {
+                handlePointerMove(e.clientY);
+            });
+            window.addEventListener('mouseup', handlePointerEnd);
+
+            window.addEventListener('touchstart', (e) => {
+                if (e.target.closest('.back-link') || e.target.closest('.lightbox') || e.target.closest('.lightbox-nav')) return;
+                handlePointerStart(e.touches[0].clientY);
+            }, { passive: true });
+            window.addEventListener('touchmove', (e) => {
+                handlePointerMove(e.touches[0].clientY);
+            }, { passive: true });
+            window.addEventListener('touchend', handlePointerEnd);
+
+            // Gestione Swipe sul Lightbox per dispositivi mobile
+            let lightboxStartX = 0;
+            let lightboxStartY = 0;
+
+            lightbox.addEventListener('touchstart', (e) => {
+                lightboxStartX = e.touches[0].clientX;
+                lightboxStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            lightbox.addEventListener('touchend', (e) => {
+                const diffX = e.changedTouches[0].clientX - lightboxStartX;
+                const diffY = e.changedTouches[0].clientY - lightboxStartY;
+                if (Math.abs(diffX) > 50 && Math.abs(diffY) < 100) {
+                    if (diffX > 0) {
+                        let newIndex = currentLightboxIndex - 1;
+                        if (newIndex < 0) newIndex = totalCards - 1;
+                        updateLightbox(newIndex);
+                    } else {
+                        let newIndex = currentLightboxIndex + 1;
+                        if (newIndex >= totalCards) newIndex = 0;
+                        updateLightbox(newIndex);
+                    }
+                }
+            }, { passive: true });
+
+            function updateLightbox(index) {
+                currentLightboxIndex = index;
+                const bgImage = cards[index].style.backgroundImage;
+                const url = bgImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+                
+                lightboxImg.src = url;
+                lightboxCounterEl.innerText = `${index + 1} / ${totalCards}`;
+            }
+
+            cards.forEach((card, index) => {
+                card.addEventListener('click', (e) => {
+                    if (isDraggingGallery) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
+                    }
+                    updateLightbox(index);
+                    lightbox.classList.add('active');
+                });
+            });
+
+            btnPrev.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                let newIndex = currentLightboxIndex - 1;
+                if (newIndex < 0) newIndex = totalCards - 1; 
+                updateLightbox(newIndex);
+            });
+
+            btnNext.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                let newIndex = currentLightboxIndex + 1;
+                if (newIndex >= totalCards) newIndex = 0; 
+                updateLightbox(newIndex);
+            });
+
+            lightboxImg.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            lightbox.addEventListener('click', () => {
+                lightbox.classList.remove('active');
+            });
+
+            window.addEventListener('keydown', (e) => {
+                if (!lightbox.classList.contains('active')) return;
+
+                if (e.key === 'Escape') {
+                    lightbox.classList.remove('active');
+                } else if (e.key === 'ArrowLeft') {
+                    let newIndex = currentLightboxIndex - 1;
+                    if (newIndex < 0) newIndex = totalCards - 1;
+                    updateLightbox(newIndex);
+                } else if (e.key === 'ArrowRight') {
+                    let newIndex = currentLightboxIndex + 1;
+                    if (newIndex >= totalCards) newIndex = 0;
+                    updateLightbox(newIndex);
+                }
+            });
+
+            function animate() {
+                scrollCurrent += (scrollTarget - scrollCurrent) * 0.08;
+                const loopLength = totalCards * baseSpacing;
+                
+                let closestDistance = Infinity;
+                let activeIndex = 0;
+
+                cards.forEach((card, index) => {
+                    let progress = (index * baseSpacing) - scrollCurrent;
+                    progress = ((progress % loopLength) + loopLength) % loopLength;
+                    let currentPos = progress - (loopLength / 2);
+
+                    if (Math.abs(currentPos) < closestDistance) {
+                        closestDistance = Math.abs(currentPos);
+                        activeIndex = index;
+                    }
+
+                    let gap = 0;
+                    if (currentPos > activeZone) {
+                        gap = gapSize; 
+                    } else if (currentPos < -activeZone) {
+                        gap = -gapSize; 
+                    } else {
+                        gap = (currentPos / activeZone) * gapSize;
+                    }
+
+                    let adjustedPos = currentPos + gap;
+                    
+                    let xMultiplier = isMobile ? 1.0 : 1.5;
+                    let yMultiplier = isMobile ? -0.5 : -0.75;
+                    let zMultiplier = isMobile ? -0.25 : -0.35;
+                    let centerThreshold = isMobile ? 120 : 200;
+                    let centerMultiplier = isMobile ? 0.5 : 0.8;
+
+                    let xOffset = adjustedPos * xMultiplier;   
+                    let yOffset = adjustedPos * yMultiplier;  
+                    let zOffset = adjustedPos * zMultiplier;  
+
+                    let distanceToCenter = Math.abs(currentPos);
+                    if (distanceToCenter < centerThreshold) {
+                        zOffset += (centerThreshold - distanceToCenter) * centerMultiplier; 
+                    }
+
+                    card.style.zIndex = Math.round(10000 - distanceToCenter);
+
+                    if (index === activeIndex) {
+                        card.classList.add('center-active');
+                    } else {
+                        card.classList.remove('center-active');
+                    }
+
+                    card.style.transform = "translate3d(" + xOffset + "px, " + yOffset + "px, " + zOffset + "px) rotateY(-25deg)";
+                    card.style.opacity = 1; 
+                });
+
+                counterEl.innerText = `${activeIndex + 1} / ${totalCards}`;
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        });
+    </script>
+</body>
+</html>

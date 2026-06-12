@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lele.matic</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+</head>
+<body>
+
+<div id="datetime-header" class="datetime-header"></div>
+
+<button id="toggle-colors" class="toggle-btn"></button>
+
+<button id="toggle-info" class="info-btn"></button>
+
+<div id="info-dropdown" class="info-dropdown">
+    <div class="info-content">
+        <h1 class="stretch-text info-title">GENERAL INFO</h1>
+        <p class="stretch-text info-para">LELE.MATIC</p>
+        <!-- <p class="stretch-text info-para">Questo sito è un archivio di progetti digitali e fisici, incentrato sulla sperimentazione tridimensionale, la tipografia cinetica e il design d'avanguardia.</p>
+        <p class="stretch-text info-para">Esplora i progetti ruotando la ruota o trascinando gli elementi per visualizzare i dettagli in modalità 3D interattiva.</p>
+        <p class="stretch-text info-para">CONTATTI</p>
+        <p class="stretch-text info-para">Email: info@lelematic.xyz</p> -->
+        <p class="stretch-text info-para">Instagram: @lele.matic</p>
+    </div>
+</div>
+
+    <section class="viewport">
+        <div class="wheel" id="wheel">
+            <div class="center-display" id="center-display">
+                <img id="active-bg-image" class="rotating-center-image" src="" alt="Progetto Attivo" style="display: none; opacity: 0;">
+                
+                <model-viewer 
+                    id="active-bg-model" 
+                    src="" 
+                    auto-rotate 
+                    interaction-prompt="none"
+                    camera-controls 
+                    disable-zoom 
+                    style="display: none; opacity: 0;">
+                </model-viewer>
+            </div>
+
+            <div class="wheel-item">
+                <a href="crackhead.html" class="wheel-content">
+                    <model-viewer src="11real_rotante.glb" interaction-prompt="none"></model-viewer>
+                    <h3>Crackhead Bridge</h3>
+                </a>
+            </div>
+
+            <div class="wheel-item">
+                <a href="war_pigs.html" class="wheel-content">
+                    <model-viewer src="war_pigs_book-v3.glb" interaction-prompt="none"></model-viewer>
+                    <h3>Army of the War Pigs</h3>
+                </a>
+            </div>
+
+            <div class="wheel-item">
+                <a href="flying_saucers.html" class="wheel-content">
+                    <model-viewer src="BOOK_UFO-v4.glb" interaction-prompt="none"></model-viewer>
+                    <h3>Flying Saucers</h3>
+                </a>
+            </div>
+
+            <!-- <div class="wheel-item">
+                <a href="pagina-4.html" class="wheel-content">
+                    <img src="https://via.placeholder.com/300x400/666/fff?text=Verticale" alt="Progetto 4">
+                    <h3>Progetto 4</h3>
+                </a>
+            </div> 
+
+            <div class="wheel-item">
+                <a href="pagina-5.html" class="wheel-content">
+                    <img src="https://via.placeholder.com/500x200/777/fff?text=Orizzontale" alt="Progetto 5">
+                    <h3>Progetto 5</h3>
+                </a>
+            </div>
+
+            <div class="wheel-item">
+                <a href="pagina-6.html" class="wheel-content">
+                    <img src="https://via.placeholder.com/300x300/888/fff?text=Quadrato" alt="Progetto 6">
+                    <h3>Progetto 6</h3>
+                </a>
+            </div> -->
+
+        </div>
+    </section>
+
+    <div id="dynamic-title-container">
+        <h3 id="dynamic-title"></h3>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
