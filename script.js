@@ -4,8 +4,14 @@ const centerDisplay = document.getElementById('center-display');
 const activeBgImage = document.getElementById('active-bg-image');
 const activeBgModel = document.getElementById('active-bg-model');
 const dynamicTitle = document.getElementById('dynamic-title');
+const toggleBtn = document.getElementById('toggle-colors');
+const dropdownToggleBtn = document.getElementById('dropdown-toggle-colors');
+const infoContent = document.querySelector('.info-content');
+const datetimeHeader = document.getElementById('datetime-header');
+const infoBtn = document.getElementById('toggle-info');
+const infoDropdown = document.getElementById('info-dropdown');
 
-// === CALCOLO DINAMICO DEL DIAMETRO DELLA RUOTA ===
+// === RAGGIO DINAMICO DELLA RUOTA ===
 let radius = window.innerWidth < 768 ? 200 : 380;
 
 function arrangeItems() {
@@ -15,10 +21,8 @@ function arrangeItems() {
     });
 }
 
-// 1. DISPOSIZIONE A CILINDRO INIZIALE
 arrangeItems();
 
-// Aggiorna il diametro al ridimensionamento della finestra
 window.addEventListener('resize', () => {
     const newRadius = window.innerWidth < 768 ? 200 : 380;
     if (newRadius !== radius) {
@@ -26,8 +30,8 @@ window.addEventListener('resize', () => {
         arrangeItems();
     }
 });
-// ==================================================
 
+// === VARIABILI DI ROTAZIONE ===
 let currentRotation = 0;
 let targetRotation = 0;
 
@@ -36,13 +40,11 @@ let targetMouseX = 0;
 let targetMouseY = 0;
 let currentMouseX = 0;
 let currentMouseY = 0;
-
 const tiltIntensity = 5;
 
 window.addEventListener('mousemove', (e) => {
     const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
     const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
-
     targetMouseX = mouseX * tiltIntensity;
     targetMouseY = mouseY * tiltIntensity;
 });
@@ -56,19 +58,18 @@ let startRotation = 0;
 let scrollTimeout;
 const dragThreshold = 5;
 
-// Gestione Scroll Mouse
+// Scroll mouse
 window.addEventListener('wheel', (e) => {
     if (isDropdownOpen) return;
     isInteracting = true;
     targetRotation -= e.deltaY * 0.08;
-
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
         isInteracting = false;
     }, 150);
 });
 
-// Inizio Drag
+// Inizio drag
 function handleStart(clientX) {
     isMouseDown = true;
     isInteracting = true;
@@ -77,17 +78,17 @@ function handleStart(clientX) {
     isDragging = false;
 }
 
-// Spostamento Drag
+// Spostamento drag
 function handleMove(clientX) {
     if (!isMouseDown) return;
     const deltaX = clientX - startX;
     if (Math.abs(deltaX) > dragThreshold) {
         isDragging = true;
     }
-    targetRotation = startRotation + deltaX * 0.25; // Sensibilità drag
+    targetRotation = startRotation + deltaX * 0.25;
 }
 
-// Fine Drag
+// Fine drag
 function handleEnd() {
     if (!isMouseDown) return;
     isMouseDown = false;
@@ -96,27 +97,25 @@ function handleEnd() {
     }, 50);
 }
 
-// Eventi Mouse
+// Eventi mouse
 window.addEventListener('mousedown', (e) => {
     if (e.button !== 0 || e.target.closest('.toggle-btn') || e.target.closest('.info-btn') || e.target.closest('.info-dropdown')) return;
     handleStart(e.clientX);
 });
-window.addEventListener('mousemove', (e) => {
-    handleMove(e.clientX);
-});
+window.addEventListener('mousemove', (e) => { handleMove(e.clientX); });
 window.addEventListener('mouseup', handleEnd);
 
-// Eventi Touch (Dispositivi Mobili)
+// Eventi touch
 window.addEventListener('touchstart', (e) => {
     if (e.target.closest('.toggle-btn') || e.target.closest('.info-btn') || e.target.closest('.info-dropdown')) return;
     handleStart(e.touches[0].clientX);
-});
+}, { passive: true });
 window.addEventListener('touchmove', (e) => {
     handleMove(e.touches[0].clientX);
-});
+}, { passive: true });
 window.addEventListener('touchend', handleEnd);
 
-// Previene il click sui link se si sta trascinando la ruota
+// Previene click se si sta trascinando
 document.querySelectorAll('.wheel-content').forEach(link => {
     link.addEventListener('click', (e) => {
         if (isDragging) {
@@ -128,19 +127,14 @@ document.querySelectorAll('.wheel-content').forEach(link => {
 
 // === LOOP DI ANIMAZIONE PRINCIPALE ===
 function animate() {
-    // Inerzia della ruota
     currentRotation += (targetRotation - currentRotation) * 0.08;
-
-    // Inerzia fluida del movimento del mouse
     currentMouseX += (targetMouseX - currentMouseX) * 0.05;
     currentMouseY += (targetMouseY - currentMouseY) * 0.05;
 
-    // Rotazione del cilindro + inclinazione mouse
     wheel.style.transform = `rotateX(${-5 - currentMouseY}deg) rotateY(${currentRotation + currentMouseX}deg)`;
 
-    // Applica rotazione contraria al display centrale per tenerlo allineato alla camera (statico)
     if (centerDisplay) {
-        centerDisplay.style.transform = `translate3d(-50%, -50%, 0px) rotateY(${- (currentRotation + currentMouseX)}deg) rotateX(${5 + currentMouseY}deg)`;
+        centerDisplay.style.transform = `translate3d(-50%, -50%, 0px) rotateY(${-(currentRotation + currentMouseX)}deg) rotateX(${5 + currentMouseY}deg)`;
     }
 
     let normalizedRotation = currentRotation % 360;
@@ -150,31 +144,24 @@ function animate() {
     let closestIndex = 0;
     let minDiff = Infinity;
 
-    // Calcolo elemento centrale
     items.forEach((item, index) => {
         const itemAngle = (360 / items.length) * index;
         let diff = Math.abs(itemAngle - targetAngle);
         if (diff > 180) diff = 360 - diff;
-
         if (diff < minDiff) {
             minDiff = diff;
             closestIndex = index;
         }
     });
 
-    // Gestione opacità e visibilità sulla ruota + aggiornamento display centrale
     items.forEach((item, index) => {
         const itemAngle = (360 / items.length) * index;
         let diff = Math.abs(itemAngle - targetAngle);
         if (diff > 180) diff = 360 - diff;
 
-        let opacity = 0.35; // Default per inattivi
-        let isVisible = true;
+        const opacity = index === closestIndex ? 1.0 : 0.35;
 
         if (index === closestIndex) {
-            opacity = 1.0; // Attivo sulla ruota
-            isVisible = true;
-
             if (!item.classList.contains('active')) {
                 item.classList.add('active');
 
@@ -182,7 +169,6 @@ function animate() {
                 const modelElement = item.querySelector('.wheel-content model-viewer');
                 const itemTitleText = item.querySelector('h3').textContent;
 
-                // Aggiorna il titolo in basso
                 if (dynamicTitle.textContent !== itemTitleText) {
                     dynamicTitle.style.opacity = 0;
                     setTimeout(() => {
@@ -191,12 +177,10 @@ function animate() {
                     }, 150);
                 }
 
-                // Aggiorna lo sfondo centrale (modello o immagine)
                 if (imgElement) {
                     if (activeBgImage.src !== imgElement.src || activeBgImage.style.display === 'none') {
                         activeBgImage.style.opacity = 0;
                         activeBgModel.style.opacity = 0;
-
                         setTimeout(() => {
                             activeBgModel.style.display = 'none';
                             activeBgImage.style.display = 'block';
@@ -208,7 +192,6 @@ function animate() {
                     if (activeBgModel.src !== modelElement.src || activeBgModel.style.display === 'none') {
                         activeBgImage.style.opacity = 0;
                         activeBgModel.style.opacity = 0;
-
                         setTimeout(() => {
                             activeBgImage.style.display = 'none';
                             activeBgModel.style.display = 'block';
@@ -223,7 +206,6 @@ function animate() {
         }
 
         item.style.opacity = opacity;
-        item.style.visibility = isVisible ? 'visible' : 'hidden';
     });
 
     requestAnimationFrame(animate);
@@ -232,45 +214,60 @@ function animate() {
 animate();
 
 // === INVERSIONE COLORI (DARK/LIGHT MODE) ===
-const toggleBtn = document.getElementById('toggle-colors');
-const dropdownToggleBtn = document.getElementById('dropdown-toggle-colors');
+
+
+function applyColorMode() {
+    const isLight = document.body.classList.contains('light-mode');
+
+    // Dropdown: sfondo e testo
+    if (infoDropdown) {
+        infoDropdown.style.backgroundColor = isLight
+            ? 'rgba(255,255,255,0.98)'
+            : 'rgba(0,0,0,0.96)';
+    }
+
+    // Testo del dropdown
+    if (infoContent) {
+        infoContent.style.color = isLight ? '#00ffff' : '#ff0000';
+    }
+
+    // Bottone inverti dentro il dropdown
+    if (dropdownToggleBtn) {
+        dropdownToggleBtn.style.filter = isLight ? 'invert(1)' : 'none';
+    }
+}
 
 function toggleColors() {
     document.body.classList.toggle('light-mode');
+    applyColorMode();
 }
 
-if (toggleBtn) {
-    toggleBtn.addEventListener('click', toggleColors);
-}
-if (dropdownToggleBtn) {
-    dropdownToggleBtn.addEventListener('click', toggleColors);
-}
+if (toggleBtn) toggleBtn.addEventListener('click', toggleColors);
+if (dropdownToggleBtn) dropdownToggleBtn.addEventListener('click', toggleColors);
 
-// Salvaguardia per bottone indietro (se presente su altre pagine)
-const backBtn = document.getElementById('back-btn');
-if (backBtn) {
-    backBtn.addEventListener('click', function () {
-        window.location.href = 'index.html';
-    });
-}
+// Applica lo stato iniziale al caricamento
+applyColorMode();
 
-// === GESTIONE DATA E ORA SUL SOFFITTO ===
-const datetimeHeader = document.getElementById('datetime-header');
+// === DATA E ORA ===
+
+
 function updateDateTime() {
+    if (!datetimeHeader) return;
     const now = new Date();
-    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-    const dateStr = now.toLocaleDateString('en-US', options).toUpperCase();
+    const dateStr = now.toLocaleDateString('en-US', {
+        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    }).toUpperCase();
     const timeStr = now.toLocaleTimeString('en-US');
     datetimeHeader.textContent = `${dateStr} | ${timeStr}`;
 }
+
 if (datetimeHeader) {
     updateDateTime();
     setInterval(updateDateTime, 1000);
 }
 
-// === GESTIONE DROPDOWN INFO & ANIMAZIONE DISTORSIONE CENTRO-SCHERMO ===
-const infoBtn = document.getElementById('toggle-info');
-const infoDropdown = document.getElementById('info-dropdown');
+// === GESTIONE DROPDOWN INFO ===
+
 
 let isDropdownOpen = false;
 
@@ -279,21 +276,18 @@ if (infoBtn && infoDropdown) {
         isDropdownOpen = !isDropdownOpen;
         infoBtn.classList.toggle('active');
         infoDropdown.classList.toggle('active');
-        
-        if (isDropdownOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
+        infoDropdown.setAttribute('aria-hidden', isDropdownOpen ? 'false' : 'true');
+
+        if (!isDropdownOpen) {
             infoDropdown.scrollTop = 0;
-            // Ripristina lo stato iniziale dei testi
-            const stretchTexts = document.querySelectorAll('.stretch-text');
-            stretchTexts.forEach(el => {
+            document.querySelectorAll('.stretch-text').forEach(el => {
                 el.style.transform = 'scaleY(1)';
             });
         }
     });
 }
 
+// === ANIMAZIONE DISTORSIONE TESTO ===
 function animateTextDistortion() {
     if (isDropdownOpen) {
         const centerY = window.innerHeight / 2;
@@ -318,5 +312,4 @@ function animateTextDistortion() {
     requestAnimationFrame(animateTextDistortion);
 }
 
-// Avvia il loop di distorsione
 animateTextDistortion();
