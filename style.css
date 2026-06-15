@@ -254,7 +254,7 @@ body.light-mode .dropdown-toggle-btn {
     z-index: 2100;
     width: 80px;
     height: 80px;
-    background-image: url('assets/red_skull_1.png');
+    background-image: url('red_skull_1.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
