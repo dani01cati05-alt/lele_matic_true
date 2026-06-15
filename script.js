@@ -233,10 +233,17 @@ animate();
 
 // === INVERSIONE COLORI (DARK/LIGHT MODE) ===
 const toggleBtn = document.getElementById('toggle-colors');
+const dropdownToggleBtn = document.getElementById('dropdown-toggle-colors');
+
+function toggleColors() {
+    document.body.classList.toggle('light-mode');
+}
+
 if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('light-mode');
-    });
+    toggleBtn.addEventListener('click', toggleColors);
+}
+if (dropdownToggleBtn) {
+    dropdownToggleBtn.addEventListener('click', toggleColors);
 }
 
 // Salvaguardia per bottone indietro (se presente su altre pagine)
