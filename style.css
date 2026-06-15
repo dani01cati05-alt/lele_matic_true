@@ -8,7 +8,7 @@ body {
     background-color: #000000;
     color: #ffffff;
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    overflow: hidden; 
+    overflow: hidden;
     height: 100vh;
     transition: background-color 0.5s ease, color 0.5s ease;
 }
@@ -26,6 +26,7 @@ body {
     letter-spacing: 2px;
     text-transform: uppercase;
     pointer-events: none;
+    transition: color 0.5s ease;
 }
 
 /* === DISPLAY CENTRALE === */
@@ -34,9 +35,9 @@ body {
     top: 50%;
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
-    height: 600px; 
-    width: 600px; 
-    z-index: 0; 
+    height: 600px;
+    width: 600px;
+    z-index: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,24 +47,24 @@ body {
 
 @keyframes spin {
     from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    to   { transform: rotate(360deg); }
 }
 
 .rotating-center-image {
-    animation: spin 12s linear infinite; 
-    height: 100%; 
-    width: auto;  
-    border-radius: 50%; 
+    animation: spin 12s linear infinite;
+    height: 100%;
+    width: auto;
+    border-radius: 50%;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
     transition: opacity 0.3s ease;
     pointer-events: none;
 }
 
 #active-bg-model {
-    height: 100%; 
+    height: 100%;
     width: 100%;
     background-color: transparent;
-    --poster-color: transparent; 
+    --poster-color: transparent;
     transition: opacity 0.3s ease;
     pointer-events: none;
 }
@@ -76,7 +77,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1200px; 
+    perspective: 1200px;
     transform-style: preserve-3d;
     z-index: 1;
 }
@@ -98,7 +99,7 @@ body {
     margin-left: -80px;
     margin-top: -110px;
     transform-style: preserve-3d;
-    opacity: 0; 
+    opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s ease;
 }
@@ -110,24 +111,22 @@ a.wheel-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-decoration: none; 
+    text-decoration: none;
     color: inherit;
-    transform-style: preserve-3d; 
+    transform-style: preserve-3d;
     transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .wheel-item.active {
     pointer-events: auto;
-    z-index: 10; 
+    z-index: 10;
 }
-
-
 
 /* === STILE FOTO E MODELLI SULLA RUOTA === */
 .wheel-content img {
     width: 100%;
     height: 100%;
-    object-fit: contain;   
+    object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
@@ -136,42 +135,42 @@ a.wheel-content {
     width: 100%;
     height: 100%;
     background-color: transparent;
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 .wheel-content h3 {
-    display: none; 
+    display: none;
 }
 
-/* === NUOVO TITOLO FISSO IN BASSO AL CENTRO === */
+/* === TITOLO FISSO IN BASSO AL CENTRO === */
 #dynamic-title-container {
     position: fixed;
-    bottom: 50px; 
+    bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 100;
     text-align: center;
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 #dynamic-title {
     color: red;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 24px; 
+    font-size: 24px;
     font-weight: bold;
     letter-spacing: 4px;
     text-transform: uppercase;
     margin: 0;
-    opacity: 0; 
-    transition: opacity 0.3s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease, color 0.5s ease;
 }
 
-/* === BOTTONE INVERTI COLORI (sempre visibile, sopra il dropdown) === */
+/* === BOTTONE INVERTI COLORI (fisso, sempre sopra il dropdown) === */
 .toggle-btn {
     position: fixed;
     top: 10px;
     right: 30px;
-    z-index: 2100; /* sopra il dropdown z-index: 1999 */
+    z-index: 2100;
     width: 80px;
     height: 80px;
     background-image: url('invert_button.png');
@@ -190,7 +189,7 @@ a.wheel-content {
     transform: none;
 }
 
-/* Bottone inverti colori DENTRO il dropdown (mobile/tablet friendly) */
+/* === BOTTONE INVERTI COLORI DENTRO IL DROPDOWN === */
 .dropdown-toggle-btn {
     display: block;
     margin: 40px auto 0 auto;
@@ -205,44 +204,174 @@ a.wheel-content {
     cursor: pointer;
     padding: 0;
     clip-path: inset(2px);
+    transition: filter 0.5s ease;
 }
 
-/* === MODALITÀ LIGHT E GESTIONE INVERSIONE === */
-
+/* === MODALITÀ LIGHT === */
 body.light-mode {
     background-color: #ffffff;
     color: #000000;
 }
 
-/* Inversione bottone senza alone */
 body.light-mode .toggle-btn {
     mix-blend-mode: difference;
     filter: none;
 }
 
-/* Inverte foto e modelli */
 body.light-mode img,
 body.light-mode model-viewer {
     filter: invert(1);
     transition: filter 0.5s ease;
 }
 
-/* Inversione bottone teschio */
 body.light-mode .info-btn {
     filter: invert(1);
 }
 
 body.light-mode #dynamic-title {
-    color: #00ffff; 
+    color: #00ffff;
 }
 
-/* === RESPONSIVE MOBILE === */
-@media (max-width: 767px) {
-    body {
-        overflow: hidden;
-        touch-action: pan-y;
+body.light-mode .datetime-header {
+    color: #00ffff;
+}
+
+/* === INVERSIONE TESTO DROPDOWN IN LIGHT MODE === */
+body.light-mode .info-content {
+    color: #00ffff;
+}
+
+body.light-mode .dropdown-toggle-btn {
+    filter: invert(1);
+}
+
+/* === BOTTONE MENU A TENDINA (teschio) === */
+.info-btn {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2100;
+    width: 80px;
+    height: 80px;
+    background-image: url('assets/red_skull_1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    clip-path: inset(2px);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
+}
+
+.info-btn:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+.info-btn.active {
+    transform: translateX(-50%) rotate(180deg);
+}
+
+/* === MENU A TENDINA === */
+.info-dropdown {
+    position: fixed;
+    top: -100vh;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.96);
+    z-index: 1999;
+    transition: top 0.5s ease;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 120px 40px 80px 40px;
+    scrollbar-width: none;
+    box-sizing: border-box;
+}
+
+.info-dropdown::-webkit-scrollbar {
+    display: none;
+}
+
+.info-dropdown.active {
+    top: 0;
+}
+
+body.light-mode .info-dropdown {
+    background-color: rgba(255, 255, 255, 0.98);
+}
+
+/* === TIPOGRAFIA DROPDOWN === */
+.info-content {
+    max-width: 900px;
+    width: 100%;
+    color: #ff0000;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+    padding-top: 15vh;
+    padding-bottom: 25vh;
+    transition: color 0.5s ease;
+}
+
+.stretch-text {
+    display: block;
+    font-weight: 900;
+    text-transform: uppercase;
+    transform-origin: center;
+    will-change: transform;
+    transition: transform 0.05s ease-out;
+}
+
+.info-title {
+    font-size: 6rem;
+    letter-spacing: 4px;
+    line-height: 1.1;
+    margin-bottom: 70px;
+    margin-top: 20px;
+}
+
+.info-para {
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+    line-height: 1.25;
+    margin: 45px 0;
+}
+
+/* === RESPONSIVE TABLET (768–1024px) === */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .center-display {
+        width: 380px;
+        height: 380px;
     }
 
+    .wheel-item {
+        width: 120px;
+        height: 170px;
+        margin-left: -60px;
+        margin-top: -85px;
+    }
+
+    .info-dropdown {
+        padding: 110px 60px 80px 60px;
+    }
+
+    .info-title {
+        font-size: 4rem;
+    }
+
+    .info-para {
+        font-size: 2rem;
+    }
+}
+
+/* === RESPONSIVE MOBILE (max 767px) === */
+@media (max-width: 767px) {
     .center-display {
         width: 240px;
         height: 240px;
@@ -289,7 +418,6 @@ body.light-mode #dynamic-title {
         transform: translateX(-50%) scale(1.05);
     }
 
-    /* Dropdown full-screen mobile */
     .info-dropdown {
         padding: 90px 20px 60px 20px;
         align-items: flex-start;
@@ -318,137 +446,4 @@ body.light-mode #dynamic-title {
         height: 55px;
         margin-top: 30px;
     }
-}
-
-/* Tablet */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .center-display {
-        width: 380px;
-        height: 380px;
-    }
-
-    .wheel-item {
-        width: 120px;
-        height: 170px;
-        margin-left: -60px;
-        margin-top: -85px;
-    }
-
-    .info-dropdown {
-        padding: 110px 60px 80px 60px;
-    }
-
-    .info-title {
-        font-size: 4rem;
-    }
-
-    .info-para {
-        font-size: 2rem;
-    }
-}
-
-/* === GENERAL INFO DROPDOWN STYLE === */
-.info-btn {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2100; /* sempre sopra il dropdown */
-    width: 80px;
-    height: 80px;
-    background-image: url('assets/red_skull_1.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    clip-path: inset(2px);
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
-}
-
-.info-btn:hover {
-    transform: translateX(-50%) scale(1.1);
-}
-
-.info-btn.active {
-    transform: translateX(-50%) rotate(180deg);
-}
-
-.info-dropdown {
-    position: fixed;
-    top: -100vh;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.96);
-    z-index: 1999;
-    transition: top 0.5s ease;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 120px 40px 80px 40px;
-    scrollbar-width: none; /* Firefox */
-    box-sizing: border-box;
-}
-
-.info-dropdown::-webkit-scrollbar {
-    display: none; /* Safari/Chrome */
-}
-
-.info-dropdown.active {
-    top: 0;
-}
-
-/* Dropdown invertito in light-mode */
-body.light-mode .info-dropdown {
-    background-color: rgba(255, 255, 255, 0.98);
-}
-
-body.light-mode .datetime-header {
-    color: #00ffff;
-}
-
-/* Bottone inverti dentro dropdown invertito */
-body.light-mode .dropdown-toggle-btn {
-    filter: invert(1);
-}
-
-/* Stile della tipografia */
-.info-content {
-    max-width: 900px;
-    width: 100%;
-    color: #ff0000;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    text-align: center;
-    text-transform: uppercase;
-    padding-top: 15vh;
-    padding-bottom: 25vh;
-}
-
-.stretch-text {
-    display: block;
-    font-weight: 900;
-    text-transform: uppercase;
-    transform-origin: center;
-    will-change: transform;
-    transition: transform 0.05s ease-out; /* Transizione morbida */
-}
-
-.info-title {
-    font-size: 6rem;
-    letter-spacing: 4px;
-    line-height: 1.1;
-    margin-bottom: 70px;
-    margin-top: 20px;
-}
-
-.info-para {
-    font-size: 2.8rem;
-    letter-spacing: 2px;
-    line-height: 1.25;
-    margin: 45px 0;
 }
