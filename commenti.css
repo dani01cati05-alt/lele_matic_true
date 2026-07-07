@@ -1,0 +1,389 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Senza questo, il nero di body verrebbe "propagato" come sfondo del
+   canvas/viewport e dipingerebbe fuori dal filter:invert(1) del body,
+   lasciando lo sfondo non invertito (stesso fix di style.css). */
+html {
+    background-color: #000000;
+}
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    transition: filter 0.5s ease;
+}
+
+/* === MODALITÀ LIGHT: un solo invert su tutto, come su index.html === */
+body.light-mode {
+    filter: invert(1);
+}
+
+/* === BOTTONE INDIETRO === */
+.back-link {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 2100;
+}
+
+.back-button {
+    width: 50px;
+    height: auto;
+    display: block;
+    cursor: pointer;
+    animation: rotateY-infinite 4s linear infinite;
+    transform-style: preserve-3d;
+}
+
+@keyframes rotateY-infinite {
+    from { transform: rotateY(0deg); }
+    to   { transform: rotateY(360deg); }
+}
+
+/* === BOTTONE INVERTI COLORI === */
+.toggle-btn {
+    position: fixed;
+    top: 10px;
+    right: 30px;
+    z-index: 2100;
+    width: 80px;
+    height: 80px;
+    background-image: url('invert_button.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    clip-path: inset(2px);
+}
+
+/* ============================================================
+   RICHIESTA USERNAME (overlay a comparsa unica)
+   Colori/font coerenti col resto del sito. Cambia qui sotto se
+   vuoi modificare l'aspetto del box "Come ti chiami?".
+   ============================================================ */
+.username-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.94);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.username-gate.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.username-box {
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+}
+
+.username-title {
+    color: #ff0000;
+    font-weight: 900;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+
+.username-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+}
+
+.username-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.username-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 10px 4px;
+    transition: border-color 0.3s ease;
+}
+
+.username-input:focus {
+    outline: none;
+    border-bottom-color: #ff0000;
+}
+
+.username-submit-btn {
+    align-self: center;
+    padding: 12px 32px;
+    background-color: #ff0000;
+    border: 2px solid #ff0000;
+    border-radius: 30px;
+    color: #000000;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.username-submit-btn:hover {
+    transform: scale(1.05);
+}
+
+/* === PAGINA COMMENTI ===
+   max-width a 1400px (stessa larghezza "grande" usata altrove nel sito,
+   vedi .stretch-bio nelle pagine progetto): ogni commento occupa così
+   una riga intera della pagina invece di stare in una colonna stretta.
+   Il padding-bottom deve restare più alto della barra commenti fissa
+   (vedi .comment-bar più sotto), altrimenti l'ultimo commento ci finisce
+   dietro. Se cambi l'altezza della barra, aggiorna anche questo valore. */
+.comments-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 150px 40px 150px;
+}
+
+.comments-title {
+    color: #ff0000;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    letter-spacing: 3px;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+}
+
+/* === LISTA COMMENTI: un commento = una riga intera === */
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.comment-item {
+    width: 100%;
+    padding: 26px 0;
+    border-top: 1px solid rgba(255, 0, 0, 0.25);
+}
+
+.comment-item-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+/* Nome utente "evidenziato": badge pieno rosso, non solo testo colorato */
+.comment-item-name {
+    display: inline-block;
+    background-color: #ff0000;
+    color: #000000;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+/* Orario di invio del commento */
+.comment-item-date {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* Testo del commento: dimensione grande, ben leggibile. Per cambiarla
+   ancora, modifica font-size qui sotto (e nel blocco mobile più in fondo). */
+.comment-item-text {
+    color: #ffffff;
+    font-size: 1.5rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.comment-empty {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+    padding: 20px 0;
+}
+
+/* ============================================================
+   BARRA COMMENTI FISSA IN BASSO (stile "chat"), larga tutto lo
+   schermo. I testi "Type your message..." e "Send Message" si
+   modificano in commenti.html, non qui.
+   ============================================================ */
+.comment-bar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 2100;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 24px;
+    background-color: #000000;
+    border-top: 2px solid #ff0000;
+}
+
+/* Etichetta "Chatting as" + nome scelto nel gate username, scritto da
+   commenti.js in #bar-username. */
+.comment-bar-user {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    line-height: 1.25;
+}
+
+.comment-bar-user-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.comment-bar-username {
+    max-width: 160px;
+    overflow: hidden;
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.comment-bar-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.15rem;
+    padding: 10px 4px;
+    transition: border-color 0.3s ease;
+}
+
+.comment-bar-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.comment-bar-input:focus {
+    outline: none;
+    border-bottom-color: #ff0000;
+}
+
+.comment-bar-send {
+    flex-shrink: 0;
+    padding: 13px 24px;
+    background-color: #ff0000;
+    border: 2px solid #ff0000;
+    border-radius: 30px;
+    color: #000000;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.comment-bar-send:hover {
+    transform: scale(1.05);
+}
+
+/* === RESPONSIVE MOBILE === */
+@media (max-width: 767px) {
+    .back-link {
+        top: 15px;
+        left: 15px;
+    }
+
+    .back-button {
+        width: 40px;
+    }
+
+    .toggle-btn {
+        top: 8px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .comments-page {
+        padding: 110px 16px 210px;
+    }
+
+    .comments-title {
+        margin-bottom: 26px;
+    }
+
+    .comment-item-text {
+        font-size: 1.25rem;
+    }
+
+    .username-subtitle {
+        font-size: 0.9rem;
+    }
+
+    /* Su schermi stretti la barra va su tre righe (nome, input, bottone)
+       così tutto resta leggibile invece di stringersi in larghezza.
+       Il padding-bottom di .comments-page qui sopra è già maggiorato
+       per lasciare spazio alla barra più alta. */
+    .comment-bar {
+        flex-wrap: wrap;
+        padding: 14px 16px;
+    }
+
+    .comment-bar-user {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 6px;
+        flex-basis: 100%;
+    }
+
+    .comment-bar-username {
+        max-width: none;
+    }
+
+    .comment-bar-input {
+        flex-basis: 100%;
+    }
+
+    .comment-bar-send {
+        flex: 1;
+    }
+}

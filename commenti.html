@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commenti — lele.matic</title>
+    <meta name="description" content="lele.matic — Lascia un commento.">
+    <link rel="stylesheet" href="commenti.css">
+</head>
+<body>
+
+<a href="index.html" class="back-link">
+    <img src="faccia_rossa.png" class="back-button" alt="Indietro">
+</a>
+
+<button id="toggle-colors" class="toggle-btn" aria-label="Inverti colori"></button>
+
+<!-- ============================================================
+     RICHIESTA USERNAME (una tantum)
+     Compare solo se in questo browser non è ancora stato salvato
+     un nome. Una volta inviato il form qui sotto, il nome resta
+     fisso per tutti i commenti futuri (salvato in localStorage) e
+     questa schermata non ricompare più su questo dispositivo.
+     Per resettarlo durante i test: apri la console del browser su
+     questa pagina e digita:
+         localStorage.removeItem('lelematic_username')
+     Testi/titolo modificabili qui sotto.
+     ============================================================ -->
+<div id="username-gate" class="username-gate">
+    <div class="username-box">
+        <h2 class="username-title">Come ti chiami?</h2>
+        <p class="username-subtitle">Scegli un nome o un nickname: verrà usato per tutti i commenti che lasci su questa pagina.</p>
+        <form id="username-form" class="username-form">
+            <input type="text" id="username-input" class="username-input" placeholder="Il tuo nome o nickname" maxlength="40" required autocomplete="off">
+            <button type="submit" class="username-submit-btn">Continua</button>
+        </form>
+    </div>
+</div>
+
+<main class="comments-page">
+    <h1 class="comments-title">Lascia un commento</h1>
+
+    <div id="comment-list" class="comment-list"></div>
+    <p id="comment-empty" class="comment-empty">Ancora nessun commento. Sii il primo a scriverne uno.</p>
+</main>
+
+<!-- ============================================================
+     BARRA COMMENTI: fissa in fondo alla pagina, larga tutto lo
+     schermo (stile chat). Per cambiare i testi visibili, modifica:
+       - etichetta "Chatting as" qui sotto (il nome sotto è quello
+         scelto nel gate username, lo scrive commenti.js)
+       - placeholder dell'input ("Type your message...")
+       - testo del bottone di invio ("Send Message")
+     Il limite di caratteri del commento è impostato con
+     maxlength="250" sull'input qui sotto: cambia solo quel numero
+     se vuoi alzarlo o abbassarlo.
+     ============================================================ -->
+<form id="comment-bar" class="comment-bar">
+    <div class="comment-bar-user">
+        <span class="comment-bar-user-label">Chatting as</span>
+        <span class="comment-bar-username" id="bar-username"></span>
+    </div>
+    <input type="text" id="comment-text" class="comment-bar-input" placeholder="Type your message..." maxlength="250" required autocomplete="off">
+    <button type="submit" class="comment-bar-send">Send Message</button>
+</form>
+
+<script src="commenti.js"></script>
+</body>
+</html>

@@ -5,11 +5,9 @@ const activeBgImage = document.getElementById('active-bg-image');
 const activeBgModel = document.getElementById('active-bg-model');
 const dynamicTitle = document.getElementById('dynamic-title');
 const toggleBtn = document.getElementById('toggle-colors');
-const dropdownToggleBtn = document.getElementById('dropdown-toggle-colors');
-const infoContent = document.querySelector('.info-content');
 const datetimeHeader = document.getElementById('datetime-header');
 const infoBtn = document.getElementById('toggle-info');
-const infoDropdown = document.getElementById('info-dropdown');
+const infoOverlay = document.getElementById('info-overlay');
 
 // === RAGGIO DINAMICO DELLA RUOTA ===
 let radius = window.innerWidth < 768 ? 200 : 380;
@@ -58,9 +56,9 @@ let startRotation = 0;
 let scrollTimeout;
 const dragThreshold = 5;
 
-// Scroll mouse
+// Scroll mouse (resta attivo anche con l'overlay info aperto: l'overlay
+// blend non ha contenuto scrollabile proprio, quindi non c'è conflitto)
 window.addEventListener('wheel', (e) => {
-    if (isDropdownOpen) return;
     isInteracting = true;
     targetRotation -= e.deltaY * 0.08;
     clearTimeout(scrollTimeout);
@@ -99,7 +97,7 @@ function handleEnd() {
 
 // Eventi mouse
 window.addEventListener('mousedown', (e) => {
-    if (e.button !== 0 || e.target.closest('.toggle-btn') || e.target.closest('.info-btn') || e.target.closest('.info-dropdown')) return;
+    if (e.button !== 0 || e.target.closest('.toggle-btn') || e.target.closest('.info-btn') || e.target.closest('.info-overlay') || e.target.closest('.comments-btn')) return;
     handleStart(e.clientX);
 });
 window.addEventListener('mousemove', (e) => { handleMove(e.clientX); });
@@ -107,7 +105,7 @@ window.addEventListener('mouseup', handleEnd);
 
 // Eventi touch
 window.addEventListener('touchstart', (e) => {
-    if (e.target.closest('.toggle-btn') || e.target.closest('.info-btn') || e.target.closest('.info-dropdown')) return;
+    if (e.target.closest('.toggle-btn') || e.target.closest('.info-btn') || e.target.closest('.info-overlay') || e.target.closest('.comments-btn')) return;
     handleStart(e.touches[0].clientX);
 }, { passive: true });
 window.addEventListener('touchmove', (e) => {
@@ -214,39 +212,14 @@ function animate() {
 animate();
 
 // === INVERSIONE COLORI (DARK/LIGHT MODE) ===
-
-
-function applyColorMode() {
-    const isLight = document.body.classList.contains('light-mode');
-
-    // Dropdown: sfondo e testo
-    if (infoDropdown) {
-        infoDropdown.style.backgroundColor = isLight
-            ? 'rgba(255,255,255,0.98)'
-            : 'rgba(0,0,0,0.96)';
-    }
-
-    // Testo del dropdown
-    if (infoContent) {
-        infoContent.style.color = isLight ? '#00ffff' : '#ff0000';
-    }
-
-    // Bottone inverti dentro il dropdown
-    if (dropdownToggleBtn) {
-        dropdownToggleBtn.style.filter = isLight ? 'invert(1)' : 'none';
-    }
-}
+// .light-mode applica un filter:invert(1) a tutto il body (vedi style.css):
+// inverte davvero ogni cosa in un colpo solo, niente da ricalcolare qui.
 
 function toggleColors() {
     document.body.classList.toggle('light-mode');
-    applyColorMode();
 }
 
 if (toggleBtn) toggleBtn.addEventListener('click', toggleColors);
-if (dropdownToggleBtn) dropdownToggleBtn.addEventListener('click', toggleColors);
-
-// Applica lo stato iniziale al caricamento
-applyColorMode();
 
 // === DATA E ORA ===
 
@@ -266,50 +239,26 @@ if (datetimeHeader) {
     setInterval(updateDateTime, 1000);
 }
 
-// === GESTIONE DROPDOWN INFO ===
+// === GESTIONE OVERLAY INFO (effetto blend) ===
 
+let isInfoOpen = false;
 
-let isDropdownOpen = false;
+function setInfoOpen(open) {
+    isInfoOpen = open;
+    infoBtn.classList.toggle('active', open);
+    infoOverlay.classList.toggle('active', open);
+    infoOverlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+}
 
-if (infoBtn && infoDropdown) {
-    infoBtn.addEventListener('click', () => {
-        isDropdownOpen = !isDropdownOpen;
-        infoBtn.classList.toggle('active');
-        infoDropdown.classList.toggle('active');
-        infoDropdown.setAttribute('aria-hidden', isDropdownOpen ? 'false' : 'true');
+if (infoBtn && infoOverlay) {
+    infoBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setInfoOpen(!isInfoOpen);
+    });
 
-        if (!isDropdownOpen) {
-            infoDropdown.scrollTop = 0;
-            document.querySelectorAll('.stretch-text').forEach(el => {
-                el.style.transform = 'scaleY(1)';
-            });
-        }
+    infoOverlay.addEventListener('click', () => setInfoOpen(false));
+
+    window.addEventListener('keydown', (e) => {
+        if (isInfoOpen && e.key === 'Escape') setInfoOpen(false);
     });
 }
-
-// === ANIMAZIONE DISTORSIONE TESTO ===
-function animateTextDistortion() {
-    if (isDropdownOpen) {
-        const centerY = window.innerHeight / 2;
-        const stretchTexts = document.querySelectorAll('.stretch-text');
-        const maxDistance = 220;
-
-        stretchTexts.forEach(el => {
-            const rect = el.getBoundingClientRect();
-            const elCenter = rect.top + rect.height / 2;
-            const dist = Math.abs(elCenter - centerY);
-
-            if (dist < maxDistance) {
-                const ratio = dist / maxDistance;
-                const factor = 0.5 + 0.5 * Math.cos(ratio * Math.PI);
-                const scaleY = 1 + factor * 1.3;
-                el.style.transform = `scaleY(${scaleY})`;
-            } else {
-                el.style.transform = 'scaleY(1)';
-            }
-        });
-    }
-    requestAnimationFrame(animateTextDistortion);
-}
-
-animateTextDistortion();
