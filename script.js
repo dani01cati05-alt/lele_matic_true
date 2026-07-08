@@ -212,11 +212,14 @@ function animate() {
 animate();
 
 // === INVERSIONE COLORI (DARK/LIGHT MODE) ===
-// .light-mode applica un filter:invert(1) a tutto il body (vedi style.css):
+// .light-mode applica un filter:invert(1) a tutto l'html (vedi style.css):
 // inverte davvero ogni cosa in un colpo solo, niente da ricalcolare qui.
+// Va su document.documentElement (<html>) e non su body: solo l'elemento
+// radice è esente dal creare un containing block per i "position: fixed",
+// altrimenti bottoni e barre fisse si muoverebbero con lo scroll.
 
 function toggleColors() {
-    document.body.classList.toggle('light-mode');
+    document.documentElement.classList.toggle('light-mode');
 }
 
 if (toggleBtn) toggleBtn.addEventListener('click', toggleColors);

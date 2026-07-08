@@ -5,10 +5,11 @@
 }
 
 /* Senza questo, il nero di body verrebbe "propagato" come sfondo del
-   canvas/viewport e dipingerebbe fuori dal filter:invert(1) del body,
+   canvas/viewport e dipingerebbe fuori dal filter:invert(1) dell'html,
    lasciando lo sfondo non invertito (stesso fix di style.css). */
 html {
     background-color: #000000;
+    transition: filter 0.5s ease;
 }
 
 body {
@@ -16,11 +17,15 @@ body {
     color: #ffffff;
     font-family: 'Helvetica Neue', Arial, sans-serif;
     min-height: 100vh;
-    transition: filter 0.5s ease;
 }
 
-/* === MODALITÀ LIGHT: un solo invert su tutto, come su index.html === */
-body.light-mode {
+/* === MODALITÀ LIGHT: un solo invert su tutto, come su index.html ===
+   Il filtro va sull'elemento <html>, non su body: essendo l'elemento
+   radice è esente (per specifica CSS) dal creare un nuovo containing
+   block per i figli "position: fixed" (back-button, barra commenti),
+   che altrimenti si muoverebbero con lo scroll invece di restare
+   ancorati al viewport. */
+html.light-mode {
     filter: invert(1);
 }
 

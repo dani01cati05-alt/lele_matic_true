@@ -41,10 +41,12 @@ const commentsRef = collection(db, 'comments');
 
 document.addEventListener('DOMContentLoaded', () => {
     // === INVERSIONE COLORI (stessa logica di index.html) ===
+    // Su document.documentElement (<html>), non su body: vedi nota in
+    // commenti.css sul containing block dei "position: fixed".
     const toggleBtn = document.getElementById('toggle-colors');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
+            document.documentElement.classList.toggle('light-mode');
         });
     }
 

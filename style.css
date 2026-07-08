@@ -9,6 +9,7 @@
    fuori dal filter:invert(1) del body, lasciando lo sfondo non invertito. */
 html {
     background-color: #000000;
+    transition: filter 0.5s ease;
 }
 
 body {
@@ -17,7 +18,6 @@ body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     overflow: hidden;
     height: 100vh;
-    transition: filter 0.5s ease;
 }
 
 /* === HEADER DATA E ORA === */
@@ -222,10 +222,15 @@ a.wheel-content {
 }
 
 /* === MODALITÀ LIGHT ===
-   Un solo filter:invert(1) su tutto il body inverte davvero ogni cosa
+   Un solo filter:invert(1) su tutto l'html inverte davvero ogni cosa
    (sfondo, testo, immagini, model-viewer, bottoni, overlay) in un colpo
-   solo: niente più regole colore duplicate per singolo elemento. */
-body.light-mode {
+   solo: niente più regole colore duplicate per singolo elemento.
+   Il filtro va sull'elemento <html> (non su body): essendo l'elemento
+   radice, la specifica CSS lo esenta dal creare un nuovo containing
+   block per i figli "position: fixed" (bottoni, barra commenti), che
+   altrimenti smetterebbero di restare ancorati al viewport durante lo
+   scroll e si muoverebbero insieme al resto della pagina. */
+html.light-mode {
     filter: invert(1);
 }
 
@@ -340,8 +345,10 @@ body.light-mode {
     .datetime-header {
         top: 12px;
         left: 12px;
+        max-width: 36vw;
         font-size: 9px;
         letter-spacing: 1px;
+        line-height: 1.4;
     }
 
     .toggle-btn {
