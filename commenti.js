@@ -5,6 +5,7 @@
 // coerente con il resto del sito che non ha uno step di build.
 // ============================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
 import {
     getFirestore,
     collection,
@@ -26,6 +27,15 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
+
+// App Check: garantisce a Firestore che le richieste arrivino davvero
+// dal sito (reCAPTCHA v3 gira in background, invisibile agli utenti)
+// e non da script/bot che chiamano l'API direttamente.
+initializeAppCheck(firebaseApp, {
+    provider: new ReCaptchaV3Provider('6Lf0BEotAAAAAC0Ab-_e9vYD4q_Wd7hTxVWiQVDI'),
+    isTokenAutoRefreshEnabled: true
+});
+
 const db = getFirestore(firebaseApp);
 const commentsRef = collection(db, 'comments');
 
