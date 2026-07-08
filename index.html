@@ -31,12 +31,9 @@
     </div>
 </div>
 
-<!-- BOTTONE COMMENTI: "commenti_btn.png" è solo un placeholder (bolla di
-     chat rossa). Per usare la tua icona definitiva basta sostituire il
-     file commenti_btn.png nella cartella del progetto: non serve
-     toccare altro codice. -->
+<!-- BOTTONE COMMENTI: globo 3D rotante che porta alla pagina commenti. -->
 <a href="commenti.html" class="comments-btn" aria-label="Lascia un commento">
-    <img src="commenti_btn.png" class="comments-btn-icon" alt="">
+    <model-viewer src="GLOBE-v1.glb" class="comments-btn-icon" auto-rotate rotation-per-second="30deg" interaction-prompt="none" disable-zoom></model-viewer>
 </a>
 
     <section class="viewport">

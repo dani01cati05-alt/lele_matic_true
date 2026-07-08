@@ -205,13 +205,16 @@ a.wheel-content {
     z-index: 2100;
     display: block;
     width: 64px;
+    height: 64px;
     transition: transform 0.3s ease;
 }
 
 .comments-btn-icon {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    background-color: transparent;
+    pointer-events: none;
 }
 
 .comments-btn:hover {
@@ -370,5 +373,6 @@ body.light-mode {
         bottom: 15px;
         right: 12px;
         width: 46px;
+        height: 46px;
     }
 }
