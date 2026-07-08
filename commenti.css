@@ -178,6 +178,14 @@ body.light-mode {
     margin-bottom: 40px;
 }
 
+.comments-privacy-note {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 40px;
+}
+
 /* === LISTA COMMENTI: un commento = una riga intera === */
 .comment-list {
     display: flex;

@@ -1,3 +1,34 @@
+// ============================================================
+// FIREBASE — i commenti sono condivisi tra tutti i visitatori
+// tramite Firestore (non più solo nel browser di chi scrive).
+// SDK caricato via CDN in formato ESM: nessun bundler necessario,
+// coerente con il resto del sito che non ha uno step di build.
+// ============================================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    onSnapshot,
+    query,
+    orderBy,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyARruJt08AsQREXmEZ-kdCgbMCpSYDgUWU",
+    authDomain: "lele-matic-true.firebaseapp.com",
+    projectId: "lele-matic-true",
+    storageBucket: "lele-matic-true.firebasestorage.app",
+    messagingSenderId: "829792966186",
+    appId: "1:829792966186:web:0c1281fa62bea583d85553",
+    measurementId: "G-WDTKZYDJJG"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const commentsRef = collection(db, 'comments');
+
 document.addEventListener('DOMContentLoaded', () => {
     // === INVERSIONE COLORI (stessa logica di index.html) ===
     const toggleBtn = document.getElementById('toggle-colors');
@@ -49,42 +80,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ============================================================
     // COMMENTI
-    // Salvati in locale nel browser di chi scrive (nessun server
-    // dietro questo sito): restano visibili solo su quel dispositivo.
+    // Salvati su Firestore (collection "comments"): condivisi in
+    // tempo reale tra tutti i visitatori del sito, non più solo nel
+    // browser di chi scrive.
     // ============================================================
-    const COMMENTS_KEY = 'lelematic_comments';
-
     const commentBar = document.getElementById('comment-bar');
     const commentTextInput = document.getElementById('comment-text');
     const list = document.getElementById('comment-list');
     const emptyMsg = document.getElementById('comment-empty');
 
-    function loadComments() {
-        try {
-            const saved = JSON.parse(localStorage.getItem(COMMENTS_KEY));
-            return Array.isArray(saved) ? saved : [];
-        } catch {
-            return [];
-        }
-    }
-
-    function saveComments(comments) {
-        localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
-    }
-
-    function formatDate(iso) {
-        const d = new Date(iso);
+    function formatDate(timestamp) {
+        // Il commento appena inviato arriva prima con timestamp lato
+        // client nullo (in attesa di conferma dal server), poi Firestore
+        // aggiorna in automatico lo snapshot col valore reale.
+        if (!timestamp) return 'Invio in corso...';
+        const d = timestamp.toDate();
         return d.toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' }) +
             ' · ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
     }
 
-    function renderComments() {
-        const comments = loadComments();
+    function renderComments(comments) {
         list.innerHTML = '';
         emptyMsg.style.display = comments.length ? 'none' : 'block';
 
-        // Più recenti in cima
-        comments.slice().reverse().forEach(comment => {
+        comments.forEach(comment => {
             const item = document.createElement('div');
             item.className = 'comment-item';
 
@@ -114,25 +133,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Ascolta in tempo reale: ogni nuovo commento (da chiunque) appare
+    // subito a tutti senza bisogno di ricaricare la pagina.
+    const commentsQuery = query(commentsRef, orderBy('date', 'desc'));
+    onSnapshot(commentsQuery, (snapshot) => {
+        const comments = snapshot.docs.map(doc => doc.data());
+        renderComments(comments);
+    });
+
     // L'input della barra è un <input> singolo dentro un <form> col
     // bottone di invio: Invio da tastiera e click su "Send Message"
     // fanno entrambi submit del form, nessun codice extra necessario.
-    commentBar.addEventListener('submit', (e) => {
+    commentBar.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const name = getUsername();
         const text = commentTextInput.value.trim();
         if (!name || !text) return;
 
-        const comments = loadComments();
-        comments.push({ name, text, date: new Date().toISOString() });
-        saveComments(comments);
-
         commentTextInput.value = '';
         commentTextInput.focus();
-        renderComments();
+
+        await addDoc(commentsRef, { name, text, date: serverTimestamp() });
     });
 
     initUsername();
-    renderComments();
 });
