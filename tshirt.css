@@ -83,7 +83,12 @@ html.light-mode { filter:invert(1); transition:filter 0.5s ease; }
   .shirt-wrap img,
   .shirt-wrap svg { width:100%; height:auto; }
 
-  .slot-card { height:150px; }
+  /* Altezza E larghezza massima in vw (non px fissi): il design al centro
+     viene ingrandito 1.35x da tshirt.js, quindi il limite va calcolato già
+     tenendo conto di quel fattore, altrimenti il risultato finale (dopo lo
+     scale) sfonda i bordi della maglietta. */
+  .slot-card { height:20vw; }
+  .slot-card img { max-width:31vw; }
 
   .toggle-btn {
     top:15px; right:15px; width:56px; height:56px;
