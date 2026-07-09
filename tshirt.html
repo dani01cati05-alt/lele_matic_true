@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tshirt</title>
+<link rel="stylesheet" href="stylediagonale.css">
+<link rel="stylesheet" href="tshirt.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<a href="index.html" class="back-link">
+    <img src="faccia_rossa.png" class="back-button" alt="Indietro">
+</a>
+
+<button id="toggle-colors" class="toggle-btn" aria-label="Inverti colori"></button>
+
+<button id="toggle-info" class="info-btn" aria-label="Apri info">
+    <img src="red_skull_1.png" class="info-btn-icon" alt="">
+</button>
+
+<div id="info-overlay" class="info-stretch-overlay" aria-hidden="true">
+    <div class="stretch-scroll" id="stretch-scroll">
+        <div class="stretch-spacer"></div>
+        <div class="stretch-bio">
+            <p class="split-lines info-hero">TSHIRT</p>
+            <p class="split-lines info-meta-line">LELE.MATIC</p>
+            <p class="split-lines info-meta-line"><a href="https://www.instagram.com/lele.matic?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">IG @lele.matic</a></p>
+        </div>
+        <div class="stretch-spacer"></div>
+    </div>
+</div>
+
+<div class="bg"></div>
+<div id="loading">Caricamento…</div>
+
+<div class="stage">
+  <div class="shirt-wrap" id="shirtWrap">
+    <img src="tee_web/white_tee.png" alt="Maglietta" id="shirtImg">
+  </div>
+</div>
+
+<div class="slots" id="slots"></div>
+
+<script src="script-info-elastico.js"></script>
+<script src="tshirt.js"></script>
+</body>
+</html>
