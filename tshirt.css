@@ -24,9 +24,15 @@ html, body {
 .shirt-wrap img,
 .shirt-wrap svg { height:100%; width:auto; }
 
-/* ---------------- SLOT DEI DESIGN (sinistra / centro-sopra-maglietta / destra) ---------------- */
+/* ---------------- SLOT DEI DESIGN (sinistra / centro-sopra-maglietta / destra) ----------------
+   .slots è annidato dentro .shirt-wrap e usa position:absolute (non più
+   fixed): così "top:38%" è relativo all'altezza della maglietta stessa,
+   non a quella del viewport. Su mobile la maglietta è dimensionata in base
+   alla larghezza (vedi media query sotto) e quindi occupa un'altezza dello
+   schermo molto diversa da quella desktop: con top:38% legato al viewport
+   il design finiva troppo in alto, vicino al colletto invece che al petto. */
 .slots {
-  position:fixed; top:38%; left:0; width:100%; z-index:3;
+  position:absolute; top:38%; left:0; width:100%; z-index:3;
   display:flex; align-items:center; justify-content:center;
   pointer-events:none;
 }

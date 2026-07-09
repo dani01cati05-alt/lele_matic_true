@@ -58,6 +58,10 @@ function computeSlots() {
   const side = isMobile ? Math.min(160, half * 0.62) : 560;
   SLOTS["-1"].x = -side;
   SLOTS["1"].x = side;
+  // Su mobile si vede solo il design centrale, quello "sulla maglietta":
+  // le anteprime laterali restano nel DOM (per lo swipe) ma invisibili.
+  SLOTS["-1"].opacity = isMobile ? 0 : 1;
+  SLOTS["1"].opacity = isMobile ? 0 : 1;
   const edge = half + (isMobile ? 200 : 420); // ben oltre il bordo visibile
   SLOTS["-2"].x = -edge;
   SLOTS["2"].x = edge;
@@ -120,13 +124,26 @@ window.addEventListener("wheel", (e) => {
 }, { passive:false });
 
 // swipe touch (mobile): stesso meccanismo a scatti
+// I tap sui bottoni fissi (inverti colori, info, indietro) e sull'overlay
+// info non devono mai far scattare un cambio di design: la grafica al
+// centro deve restare esattamente dov'è finché non si fa uno swipe vero.
+function isOnChrome(target) {
+  return target.closest('.toggle-btn') ||
+         target.closest('.info-btn') ||
+         target.closest('.back-link') ||
+         target.closest('.info-stretch-overlay');
+}
+
 let touchStartX = null;
 window.addEventListener("touchstart", (e) => {
-  if (window.isInfoOverlayOpen) return;
+  if (window.isInfoOverlayOpen || isOnChrome(e.target)) return;
   touchStartX = e.touches[0].clientX;
 }, { passive:true });
 window.addEventListener("touchend", (e) => {
-  if (window.isInfoOverlayOpen || touchStartX === null) return;
+  if (window.isInfoOverlayOpen || touchStartX === null || isOnChrome(e.target)) {
+    touchStartX = null;
+    return;
+  }
   const dx = e.changedTouches[0].clientX - touchStartX;
   if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
   touchStartX = null;
