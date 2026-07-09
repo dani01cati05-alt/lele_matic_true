@@ -87,8 +87,8 @@ html.light-mode { filter:invert(1); transition:filter 0.5s ease; }
      viene ingrandito 1.35x da tshirt.js, quindi il limite va calcolato già
      tenendo conto di quel fattore, altrimenti il risultato finale (dopo lo
      scale) sfonda i bordi della maglietta. */
-  .slot-card { height:20vw; }
-  .slot-card img { max-width:31vw; }
+  .slot-card { height:17vw; }
+  .slot-card img { max-width:26vw; }
 
   .toggle-btn {
     top:15px; right:15px; width:56px; height:56px;
