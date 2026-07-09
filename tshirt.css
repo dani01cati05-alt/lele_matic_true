@@ -32,7 +32,7 @@ html, body {
    schermo molto diversa da quella desktop: con top:38% legato al viewport
    il design finiva troppo in alto, vicino al colletto invece che al petto. */
 .slots {
-  position:absolute; top:38%; left:0; width:100%; z-index:3;
+  position:absolute; top:41%; left:0; width:100%; z-index:3;
   display:flex; align-items:center; justify-content:center;
   pointer-events:none;
 }
