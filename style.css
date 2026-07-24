@@ -221,6 +221,29 @@ a.wheel-content {
     transform: scale(1.08);
 }
 
+.monitor-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 2100;
+    display: block;
+    width: 64px;
+    height: 64px;
+    transition: transform 0.3s ease;
+}
+
+.monitor-btn-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    pointer-events: none;
+}
+
+.monitor-btn:hover {
+    transform: scale(1.08);
+}
+
 /* === MODALITÀ LIGHT ===
    Un solo filter:invert(1) su tutto l'html inverte davvero ogni cosa
    (sfondo, testo, immagini, model-viewer, bottoni, overlay) in un colpo
@@ -379,6 +402,13 @@ html.light-mode {
     .comments-btn {
         bottom: 15px;
         right: 12px;
+        width: 46px;
+        height: 46px;
+    }
+
+    .monitor-btn {
+        bottom: 15px;
+        left: 12px;
         width: 46px;
         height: 46px;
     }
