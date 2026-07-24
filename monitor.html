@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>lele.matic — monitor</title>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-        }
-    </style>
+    <link rel="stylesheet" href="monitor.css">
 </head>
 <body>
+
+<div class="monitor-stage">
+    <div class="photo-wrap still-working">
+        <img class="real-img" src="STILL_WORKING.png" alt="">
+        <canvas class="dither-canvas"></canvas>
+    </div>
+    <div class="photo-wrap ops-bat">
+        <img class="real-img" src="ops_bat.png" alt="">
+        <canvas class="dither-canvas"></canvas>
+    </div>
+</div>
+
+<script src="monitor.js"></script>
 </body>
 </html>
