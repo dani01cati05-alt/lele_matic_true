@@ -8,13 +8,15 @@
 </head>
 <body>
 
+<a href="index.html" class="back-link">
+    <img src="faccia_rossa.png" class="back-button" alt="Indietro">
+</a>
+
+<button id="toggle-colors" class="toggle-btn" aria-label="Inverti colori"></button>
+
 <div class="monitor-stage">
-    <div class="photo-wrap still-working">
+    <div class="photo-wrap" id="stillWorking">
         <img class="real-img" src="STILL_WORKING.png" alt="">
-        <canvas class="dither-canvas"></canvas>
-    </div>
-    <div class="photo-wrap ops-bat">
-        <img class="real-img" src="ops_bat.png" alt="">
         <canvas class="dither-canvas"></canvas>
     </div>
 </div>

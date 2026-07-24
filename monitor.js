@@ -64,58 +64,6 @@
         ctx.drawImage(off, 0, 0);
     }
 
-    // === REVEAL SPOTLIGHT (mouse / touch) ===
-    var REVEAL_R_MOUSE = 140;
-    var REVEAL_R_TOUCH = 100;
-    var FEATHER = 40; // matches the "+40px" in the CSS mask
-    var EASE = 0.18;
-
-    function setupReveal(wrap) {
-        var tx = 50, ty = 50; // percent
-        var cx = 50, cy = 50;
-        var tr = 0;
-        var cr = 0;
-
-        function updateFromEvent(e) {
-            var rect = wrap.getBoundingClientRect();
-            var x = ((e.clientX - rect.left) / rect.width) * 100;
-            var y = ((e.clientY - rect.top) / rect.height) * 100;
-            tx = Math.max(0, Math.min(100, x));
-            ty = Math.max(0, Math.min(100, y));
-            tr = e.pointerType === "touch" ? REVEAL_R_TOUCH : REVEAL_R_MOUSE;
-        }
-
-        function hide() {
-            tr = 0;
-        }
-
-        wrap.addEventListener("pointermove", updateFromEvent);
-        wrap.addEventListener("pointerdown", updateFromEvent);
-        wrap.addEventListener("pointerup", hide);
-        wrap.addEventListener("pointerleave", hide);
-        wrap.addEventListener("pointercancel", hide);
-
-        function tick() {
-            cx += (tx - cx) * EASE;
-            cy += (ty - cy) * EASE;
-            cr += (tr - cr) * EASE;
-
-            var rClamped = Math.max(0, cr);
-            // Feather grows with the radius itself so a resting/near-zero
-            // radius collapses to a fully opaque mask instead of leaving a
-            // faint halo of the real image bleeding through at rest.
-            var outer = rClamped + Math.min(FEATHER, rClamped);
-
-            wrap.style.setProperty("--mx", cx + "%");
-            wrap.style.setProperty("--my", cy + "%");
-            wrap.style.setProperty("--r", rClamped + "px");
-            wrap.style.setProperty("--r-outer", outer + "px");
-
-            requestAnimationFrame(tick);
-        }
-        tick();
-    }
-
     document.querySelectorAll(".photo-wrap").forEach(function (wrap) {
         var img = wrap.querySelector(".real-img");
         var canvas = wrap.querySelector(".dither-canvas");
@@ -130,6 +78,29 @@
             img.addEventListener("load", run, { once: true });
         }
 
-        setupReveal(wrap);
+        // Cursore su PC / tocco su mobile: l'intera immagine torna normale.
+        wrap.addEventListener("pointerenter", function () {
+            wrap.classList.add("is-revealed");
+        });
+        wrap.addEventListener("pointerdown", function () {
+            wrap.classList.add("is-revealed");
+        });
+        wrap.addEventListener("pointerleave", function () {
+            wrap.classList.remove("is-revealed");
+        });
+        wrap.addEventListener("pointerup", function () {
+            wrap.classList.remove("is-revealed");
+        });
+        wrap.addEventListener("pointercancel", function () {
+            wrap.classList.remove("is-revealed");
+        });
     });
+
+    // === INVERSIONE COLORI (stessa logica di index.html/commenti.js) ===
+    var toggleBtn = document.getElementById("toggle-colors");
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", function () {
+            document.documentElement.classList.toggle("light-mode");
+        });
+    }
 })();
