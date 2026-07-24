@@ -19,6 +19,7 @@ const DESIGNS = [
   { name: "Motion",            image: "tee_web/tee_motion.png" },
   { name: "Hate",              image: "tee_web/tee_hate.png" },
   { name: "Maschera Bianca",   image: "tee_web/tee_maskW.png" },
+  { name: "Unicorn",           image: "tee_web/unicorn_tee.png" },
 ];
 
 /* =========================================================================
