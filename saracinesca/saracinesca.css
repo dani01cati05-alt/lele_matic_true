@@ -1,0 +1,39 @@
+/* ------------------------------------------------------------------ */
+/* Saracinesca — shutter loading screen shown on first entry           */
+/* ------------------------------------------------------------------ */
+
+body.is-loading {
+  overflow: hidden;
+  height: 100vh;
+}
+
+#shutter-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+#shutter-loader .shutter-img {
+  position: absolute;
+  top: 0;
+  display: block;
+  max-width: none;
+  will-change: transform;
+  transform: translateY(0);
+  /* Single continuous curve — no keyframe seams — so velocity never
+     jumps mid-motion. Slow to start, holds speed, eases out gently. */
+  transition: transform 3.6s cubic-bezier(0.45, 0, 0.18, 1);
+}
+
+#shutter-loader .shutter-img.is-open {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #shutter-loader .shutter-img.is-open {
+    animation: none;
+    transition: transform 0.4s ease;
+    transform: translateY(-100%);
+  }
+}
