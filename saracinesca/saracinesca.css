@@ -5,6 +5,7 @@
 body.is-loading {
   overflow: hidden;
   height: 100vh;
+  height: 100dvh;
 }
 
 #shutter-loader {
