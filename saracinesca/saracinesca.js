@@ -10,6 +10,17 @@
 
   var loader = document.getElementById("shutter-loader");
   if (!loader) return;
+
+  // Solo al primo ingresso nel sito in questa sessione del browser: non
+  // deve ripartire quando si torna alla home con "indietro" o con il
+  // bottone di navigazione da un'altra pagina.
+  var STORAGE_KEY = "saracinesca-shown";
+  if (sessionStorage.getItem(STORAGE_KEY)) {
+    loader.remove();
+    return;
+  }
+  sessionStorage.setItem(STORAGE_KEY, "1");
+
   var curtainImg = loader.querySelector(".shutter-img");
 
   var prefersReducedMotion = window.matchMedia(

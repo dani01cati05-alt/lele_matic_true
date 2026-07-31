@@ -20,6 +20,10 @@ const DESIGNS = [
   { name: "Hate",              image: "tee_web/tee_hate.png" },
   { name: "Maschera Bianca",   image: "tee_web/tee_maskW.png" },
   { name: "Unicorn",           image: "tee_web/unicorn_tee.png" },
+  { name: "Flame",             image: "tee_web/flame_matic_nobg.png" },
+  { name: "Jaws",              image: "tee_web/jaws_matic.png" },
+  { name: "Matic Sex",         image: "tee_web/matic_sex_nobg.png" },
+  { name: "Twin Tower",        image: "tee_web/twin_tower.png" },
 ];
 
 /* =========================================================================
