@@ -3,6 +3,10 @@
    Per aggiungere altri design in futuro, basta aggiungere una riga qui sotto:
    { name: "Nome design", image: "tee_web/nomefile.png" }
    (il file va messo nella cartella tee_web/)
+   Per correggere le proporzioni di un singolo design (es. un'immagine
+   quadrata che deve sembrare più alta, o un design troppo grande) si può
+   aggiungere scaleX/scaleY (default 1): valori applicati come transform
+   scale in più, oltre al normale ridimensionamento dello slot.
    ========================================================================= */
 const DESIGNS = [
   { name: "Orso",              image: "tee_web/tee_bear.png" },
@@ -20,9 +24,9 @@ const DESIGNS = [
   { name: "Hate",              image: "tee_web/tee_hate.png" },
   { name: "Maschera Bianca",   image: "tee_web/tee_maskW.png" },
   { name: "Unicorn",           image: "tee_web/unicorn_tee.png" },
-  { name: "Flame",             image: "tee_web/flame_matic_nobg.png" },
+  { name: "Flame",             image: "tee_web/flame_matic_nobg.png", scaleX: 0.65, scaleY: 1.1 },
   { name: "Jaws",              image: "tee_web/jaws_matic.png" },
-  { name: "Matic Sex",         image: "tee_web/matic_sex_nobg.png" },
+  { name: "Matic Sex",         image: "tee_web/matic_sex_nobg.png", scaleX: 0.7, scaleY: 0.7 },
   { name: "Twin Tower",        image: "tee_web/twin_tower.png" },
 ];
 
@@ -81,6 +85,9 @@ const cardEls = DESIGNS.map((d, i) => {
   const img = document.createElement("img");
   img.src = d.image;
   img.alt = d.name;
+  if (d.scaleX !== undefined || d.scaleY !== undefined) {
+    img.style.transform = `scale(${d.scaleX ?? 1}, ${d.scaleY ?? 1})`;
+  }
   el.appendChild(img);
   slotsEl.appendChild(el);
   return el;
