@@ -28,6 +28,7 @@ const DESIGNS = [
   { name: "Jaws",              image: "tee_web/jaws_matic.png" },
   { name: "Matic Sex",         image: "tee_web/matic_sex_nobg.png", scaleX: 0.62, scaleY: 0.62, offsetY: -25 },
   { name: "Twin Tower",        image: "tee_web/twin_tower.png" },
+  { name: "Bombs",             image: "tee_web/bombs.png" },
 ];
 
 /* =========================================================================
