@@ -3,10 +3,10 @@
    Per aggiungere altri design in futuro, basta aggiungere una riga qui sotto:
    { name: "Nome design", image: "tee_web/nomefile.png" }
    (il file va messo nella cartella tee_web/)
-   Per correggere le proporzioni di un singolo design (es. un'immagine
-   quadrata che deve sembrare più alta, o un design troppo grande) si può
-   aggiungere scaleX/scaleY (default 1): valori applicati come transform
-   scale in più, oltre al normale ridimensionamento dello slot.
+   Per correggere le proporzioni/posizione di un singolo design (es.
+   un'immagine quadrata che deve sembrare più alta, o un design troppo
+   grande o troppo in basso) si può aggiungere scaleX/scaleY (default 1)
+   e offsetY in px (default 0, negativo = più in alto).
    ========================================================================= */
 const DESIGNS = [
   { name: "Orso",              image: "tee_web/tee_bear.png" },
@@ -24,9 +24,9 @@ const DESIGNS = [
   { name: "Hate",              image: "tee_web/tee_hate.png" },
   { name: "Maschera Bianca",   image: "tee_web/tee_maskW.png" },
   { name: "Unicorn",           image: "tee_web/unicorn_tee.png" },
-  { name: "Flame",             image: "tee_web/flame_matic_nobg.png", scaleX: 0.65, scaleY: 1.1 },
+  { name: "Flame",             image: "tee_web/flame_matic_nobg.png", scaleX: 0.58, scaleY: 1.0, offsetY: -25 },
   { name: "Jaws",              image: "tee_web/jaws_matic.png" },
-  { name: "Matic Sex",         image: "tee_web/matic_sex_nobg.png", scaleX: 0.7, scaleY: 0.7 },
+  { name: "Matic Sex",         image: "tee_web/matic_sex_nobg.png", scaleX: 0.62, scaleY: 0.62, offsetY: -25 },
   { name: "Twin Tower",        image: "tee_web/twin_tower.png" },
 ];
 
@@ -85,8 +85,8 @@ const cardEls = DESIGNS.map((d, i) => {
   const img = document.createElement("img");
   img.src = d.image;
   img.alt = d.name;
-  if (d.scaleX !== undefined || d.scaleY !== undefined) {
-    img.style.transform = `scale(${d.scaleX ?? 1}, ${d.scaleY ?? 1})`;
+  if (d.scaleX !== undefined || d.scaleY !== undefined || d.offsetY !== undefined) {
+    img.style.transform = `translateY(${d.offsetY ?? 0}px) scale(${d.scaleX ?? 1}, ${d.scaleY ?? 1})`;
   }
   el.appendChild(img);
   slotsEl.appendChild(el);
